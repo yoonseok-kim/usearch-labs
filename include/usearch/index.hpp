@@ -4133,6 +4133,10 @@ class index_gt {
                 node_try_conditional_lock_(candidate_slot, updated_slot != candidate_slot, failed_to_acquire);
             if (failed_to_acquire)
                 continue;
+            std::optional<node_lock_t> updated_slot_lock;
+            if (updated_slot == candidate_slot) {
+                updated_slot_lock.emplace(nodes_mutexes_, candidate_slot);
+            }
             neighbors_ref_t candidate_neighbors = neighbors_(candidate_ref, level);
 
             // Optional prefetching
